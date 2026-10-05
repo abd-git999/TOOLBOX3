@@ -287,15 +287,55 @@ resetMapButton.onclick = function () {
 const compassArrow = document.querySelector(".compass-arrow");
 
 function handleOrientation(event) {
-    let direction = event.alpha;
+    let heading;
 
-    if (direction === null) {
+    if (event.webkitCompassHeading !== undefined) {
+        heading = event.webkitCompassHeading;
+    } else if (event.alpha !== null) {
+        heading = 360 - event.alpha;
+    }
+
+    if (heading === undefined) {
         return;
     }
 
-    compassArrow.style.transform = `rotate(${direction}deg)`;
+    compassArrow.style.transform = `rotate(${heading}deg)`;
 }
 
-if (window.DeviceOrientationEvent) {
-    window.addEventListener("deviceorientation", handleOrientation);
+async function startCompass() {
+    if (
+        typeof DeviceOrientationEvent !== "undefined" &&
+        typeof DeviceOrientationEvent.requestPermission === "function"
+    ) {
+        try {
+            const permission =
+                await DeviceOrientationEvent.requestPermission();
+
+            if (permission === "granted") {
+                window.addEventListener(
+                    "deviceorientation",
+                    handleOrientation,
+                    true
+                );
+            } else {
+                alert("Compass permission was denied.");
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    } else {
+        window.addEventListener(
+            "deviceorientationabsolute",
+            handleOrientation,
+            true
+        );
+
+        window.addEventListener(
+            "deviceorientation",
+            handleOrientation,
+            true
+        );
+    }
 }
+
+startCompass();

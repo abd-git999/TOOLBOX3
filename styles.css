@@ -426,6 +426,12 @@ margin-bottom:5px;
     #map {
         height: 500px;
     }
+    #compassButton {
+    width: 90%;
+    max-width: 250px;
+    padding: 12px;
+    font-size: 15px;
+}
 }
 .compass {
     width: 100px;
@@ -454,17 +460,14 @@ margin-bottom:5px;
 }
 #compassButton {
     display: block;
-    position: relative;
-    clear: both;
-    margin: 20px auto 30px;
-    padding: 12px 22px;
+    margin: 10px auto 20px;
+    padding: 10px 16px;
     border: none;
     border-radius: 8px;
     background-color: #222;
     color: white;
-    font-size: 16px;
+    font-size: 14px;
     cursor: pointer;
-    z-index: 2;
 }
 
 #compassButton:hover {

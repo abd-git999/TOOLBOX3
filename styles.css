@@ -427,3 +427,28 @@ margin-bottom:5px;
         height: 500px;
     }
 }
+.compass {
+    width: 100px;
+    height: 100px;
+    margin: 15px auto;
+    border: 4px solid #222;
+    border-radius: 50%;
+    position: relative;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+.compass-arrow {
+    position: absolute;
+    font-size: 40px;
+    color: #d32f2f;
+    top: 25px;
+}
+.compass-direction {
+    position: absolute;
+    top: 5px;
+    font-weight: bold;
+    font-size: 18px;
+}

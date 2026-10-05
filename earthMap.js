@@ -284,3 +284,18 @@ resetMapButton.onclick = function () {
     }
 
 };
+const compassArrow = document.querySelector(".compass-arrow");
+
+function handleOrientation(event) {
+    let direction = event.alpha;
+
+    if (direction === null) {
+        return;
+    }
+
+    compassArrow.style.transform = `rotate(${direction}deg)`;
+}
+
+if (window.DeviceOrientationEvent) {
+    window.addEventListener("deviceorientation", handleOrientation);
+}

@@ -284,58 +284,68 @@ resetMapButton.onclick = function () {
     }
 
 };
+const compassButton = document.getElementById("compassButton");
 const compassArrow = document.querySelector(".compass-arrow");
+const compassDirection = document.querySelector(".compass-direction");
 
-function handleOrientation(event) {
-    let heading;
+function updateCompass(event) {
+    let heading = null;
 
-    if (event.webkitCompassHeading !== undefined) {
+    if (typeof event.webkitCompassHeading === "number") {
         heading = event.webkitCompassHeading;
     } else if (event.alpha !== null) {
         heading = 360 - event.alpha;
     }
 
-    if (heading === undefined) {
+    if (heading === null) {
         return;
     }
 
+    heading = (heading + 360) % 360;
+
     compassArrow.style.transform = `rotate(${heading}deg)`;
+
+    const directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
+    const index = Math.round(heading / 45) % 8;
+
+    compassDirection.textContent = directions[index];
 }
 
 async function startCompass() {
-    if (
-        typeof DeviceOrientationEvent !== "undefined" &&
-        typeof DeviceOrientationEvent.requestPermission === "function"
-    ) {
-        try {
-            const permission =
-                await DeviceOrientationEvent.requestPermission();
-
-            if (permission === "granted") {
-                window.addEventListener(
-                    "deviceorientation",
-                    handleOrientation,
-                    true
-                );
-            } else {
-                alert("Compass permission was denied.");
-            }
-        } catch (error) {
-            console.error(error);
+    try {
+        if (!window.DeviceOrientationEvent) {
+            alert("Your device does not support a compass.");
+            return;
         }
-    } else {
+
+        if (typeof DeviceOrientationEvent.requestPermission === "function") {
+            const permission = await DeviceOrientationEvent.requestPermission();
+
+            if (permission !== "granted") {
+                alert("Compass permission was not granted.");
+                return;
+            }
+        }
+
         window.addEventListener(
             "deviceorientationabsolute",
-            handleOrientation,
+            updateCompass,
             true
         );
 
         window.addEventListener(
             "deviceorientation",
-            handleOrientation,
+            updateCompass,
             true
         );
+
+        compassButton.textContent = "🧭 Compass Active";
+        compassButton.disabled = true;
+
+    } catch (error) {
+        console.error(error);
+        alert("Unable to start the compass.");
     }
 }
 
-startCompass();
+compassButton.addEventListener("click", startCompass);

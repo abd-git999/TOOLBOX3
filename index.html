@@ -49,6 +49,13 @@
     <p>&copy; 2026 My Toolbox. All rights reserved.</p>
     <p>Created by Developer Abdisa Siraj</p>
 </footer>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js");
+  });
+}
+</script>
 </body>
 
 </html>
